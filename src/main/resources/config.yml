@@ -1,0 +1,13 @@
+MINING:
+  STONE:
+    value: 100
+  DIAMOND_ORE:
+    value: 500
+
+DAMAGE:
+  ZOMBIE:
+    value: 200
+  CREEPER:
+    value: 250
+
+

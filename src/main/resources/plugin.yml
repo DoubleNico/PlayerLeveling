@@ -2,7 +2,7 @@ name: PlayerLeveling
 version: ${project.version}
 main: me.doublenico.playerleveling.PlayerLeveling
 api-version: 1.16
-depend: [ PlaceholderAPI ]
 authors: [ DoubleNico ]
 description: Level System
 website: https://discord.com/invite/j5Fb3jj2Sq
+softdepend: [PlaceholderAPI]
