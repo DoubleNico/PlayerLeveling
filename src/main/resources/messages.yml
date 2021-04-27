@@ -1,0 +1,7 @@
+EXPERIENCE_GAIN: "&b{expGain} Experience."
+LEVEL_UP: "&bYou have reached a new level."
+MAX_LEVEL: "&bYou have reached the maximum level."
+REGISTER_PLAYER: "&bRegistering &e&l{uuid} &bto Data Manager"
+HELP_COMMAND:
+  - ""
+  - ""

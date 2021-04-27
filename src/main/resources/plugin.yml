@@ -6,3 +6,4 @@ depend: [ PlaceholderAPI ]
 authors: [ DoubleNico ]
 description: Level System
 website: https://discord.com/invite/j5Fb3jj2Sq
+softdepend: [PlaceholderAPI]
