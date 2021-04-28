@@ -8,5 +8,3 @@ website: https://discord.com/invite/j5Fb3jj2Sq
 softdepend: [PlaceholderAPI]
 commands:
   playerleveling:
-    usage: /<command> givexp|givelevel|reset|reload <amount>|<player> <amountTarget>
-    description: Player Leveling commands

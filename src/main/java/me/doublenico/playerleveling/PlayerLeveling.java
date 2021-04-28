@@ -1,5 +1,6 @@
 package me.doublenico.playerleveling;
 
+import me.doublenico.playerleveling.commands.CommandsManager;
 import me.doublenico.playerleveling.events.EventManager;
 import me.doublenico.playerleveling.files.DataManager;
 import me.doublenico.playerleveling.files.LevelFile;
@@ -26,6 +27,7 @@ public final class PlayerLeveling extends JavaPlugin {
     public void onEnable() {
         instance = this;
         registerEvents();
+        registerCommands();
         registerPlaceholders();
     }
 
@@ -65,7 +67,10 @@ public final class PlayerLeveling extends JavaPlugin {
         new EventManager(this);
     }
 
-
+    private void registerCommands(){
+        CC.console(prefix + "&bRegistering Commands");
+        new CommandsManager(this);
+    }
 
 
 }

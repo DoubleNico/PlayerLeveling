@@ -40,6 +40,10 @@ public class LevelManager {
         this.xp = xp;
     }
 
+    public void addXp(int xp){
+        this.xp += xp;
+    }
+
     public void xpCheck(Player player, LevelManager level) {
         for (String key :
                 levelFile.

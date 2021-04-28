@@ -14,10 +14,12 @@ public class RegisterPlayer implements Listener {
 
     public PlayerLeveling plugin;
     public DataManager data;
+    public Message message;
 
     public RegisterPlayer(PlayerLeveling plugin){
         this.plugin = plugin;
         this.data = new DataManager(plugin);
+        this.message = new Message(plugin);
     }
 
     @EventHandler
@@ -28,7 +30,7 @@ public class RegisterPlayer implements Listener {
             data.getConfig().set("PlayerLevels." + player.getUniqueId() + ".level", 0);
             data.getConfig().set("PlayerLevels." + player.getUniqueId() + ".xp", 0);
             data.saveConfig();
-            CC.console(Message.setStringColor("REGISTER_PLAYER")
+            CC.console(message.getConfig().getString("REGISTER_PLAYER")
                     .replace("{uuid}", player.getUniqueId().toString())
                     .replace("{player}", player.getName()));
         } else {
@@ -38,14 +40,6 @@ public class RegisterPlayer implements Listener {
             LevelManager playerLevelManager = plugin.levelManagerHashMap.get(player.getUniqueId());
             playerLevelManager.xpCheck(player, playerLevelManager);
             data.saveConfig();
-            if(!data.getConfig().getString("PlayerLevels.").contains(player.getUniqueId().toString())){
-                data.getConfig().set("PlayerLevels." + player.getUniqueId() + ".level", 0);
-                data.getConfig().set("PlayerLevels." + player.getUniqueId() + ".xp", 0);
-                data.saveConfig();
-                CC.console(Message.setStringColor("REGISTER_PLAYER")
-                        .replace("{uuid}", player.getUniqueId().toString())
-                        .replace("{player}", player.getName()));
-            }
         }
     }
 

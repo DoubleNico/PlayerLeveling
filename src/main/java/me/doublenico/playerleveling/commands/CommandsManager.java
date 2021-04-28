@@ -13,7 +13,7 @@ public class CommandsManager {
     }
 
     public void registerCommands(){
-        plugin.getCommand("playerleveling").setExecutor(new LevelCommand(plugin));
+        //plugin.getCommand("playerleveling").setExecutor(new LevelCommand(plugin));
     }
 
 

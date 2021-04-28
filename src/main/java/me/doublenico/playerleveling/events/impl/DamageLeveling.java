@@ -18,10 +18,12 @@ public class DamageLeveling implements Listener {
 
     private PlayerLeveling plugin;
     public DataManager data;
+    public Message message;
 
     public DamageLeveling(PlayerLeveling plugin){
         this.plugin = plugin;
         this.data = new DataManager(plugin);
+        this.message = new Message(plugin);
     }
 
 
@@ -35,7 +37,7 @@ public class DamageLeveling implements Listener {
                 ConfigurationSection section = plugin.getConfig().getConfigurationSection("DAMAGE." + key);
                 int keyXP = section.getInt(".value");
                 if (victim.getType() == EntityType.valueOf(key)) {
-                    String expMessage = Message.getConfig().getString("EXPERIENCE_GAIN");
+                    String expMessage = message.getConfig().getString("EXPERIENCE_GAIN");
                     try {
                         playerLevelManager.setXp(playerLevelManager.getXp() + keyXP);
                         player.sendMessage(CC.color(expMessage).replace("{expGain}", "" + keyXP));
