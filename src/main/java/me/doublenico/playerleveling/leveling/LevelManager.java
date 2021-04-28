@@ -14,12 +14,14 @@ public class LevelManager {
     private int xp;
     public LevelFile levelFile;
     public DataManager data;
+    public Message message;
 
     public LevelManager(int level, int xp) {
         this.level = level;
         this.xp = xp;
         this.data = new DataManager(PlayerLeveling.instance);
         this.levelFile = new LevelFile(PlayerLeveling.instance);
+        this.message = new Message(PlayerLeveling.instance);
     }
 
     public int getLevel() {
@@ -51,12 +53,12 @@ public class LevelManager {
             int levelSection = block.getInt("level");
             
             if (levelSection < level.getLevel()){
-                CC.playerMessage(player, Message.setStringColor("MAX_LEVEL"));
+                CC.playerMessage(player, message.getConfig().getString("MAX_LEVEL"));
                 level.setXp(0);
                 level.setLevel(levelSection);
             }
             if (xp  >= xpMax && levelSection != level.getLevel()) {
-                CC.playerMessage(player, Message.setStringColor("LEVEL_UP"));
+                CC.playerMessage(player, message.getConfig().getString("LEVEL_UP"));
                 level.setLevel(levelSection);
                 level.setXp(0);
                 data.getConfig().set("PlayerLevels." + player.getUniqueId() + ".level", levelSection);

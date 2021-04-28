@@ -19,6 +19,7 @@ public final class PlayerLeveling extends JavaPlugin {
     public HashMap<UUID, LevelManager> levelManagerHashMap;
     public LevelFile levelFile;
     public DataManager data;
+    public Message message;
     public String prefix = "&b&l[&e&lPlayer&eLeveling&b&l] ";
 
     @Override
@@ -38,8 +39,9 @@ public final class PlayerLeveling extends JavaPlugin {
         this.saveConfig();
         this.levelFile = new LevelFile(this);
         this.data = new DataManager(this);
-        Message.getConfig().options().copyDefaults(true);
-        Message.getConfig().save();
+        this.message = new Message(this);
+        message.getConfig().options().copyDefaults(true);
+        message.saveConfig();
     }
 
     private void registerPlaceholders() {

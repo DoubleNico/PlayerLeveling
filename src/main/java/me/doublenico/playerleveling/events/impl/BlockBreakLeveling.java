@@ -17,10 +17,12 @@ public class BlockBreakLeveling implements Listener {
 
     public PlayerLeveling plugin;
     public DataManager data;
+    public Message message;
 
     public BlockBreakLeveling(PlayerLeveling plugin){
         this.plugin = plugin;
         this.data = new DataManager(plugin);
+        this.message = new Message(plugin);
     }
 
     @EventHandler
@@ -34,7 +36,7 @@ public class BlockBreakLeveling implements Listener {
             ConfigurationSection section = plugin.getConfig().getConfigurationSection("MINING." + key);
             if (block.getType() == Material.getMaterial(key)) {
                 int keyXP = section.getInt(".value");
-                String expMessage = Message.getConfig().getString("EXPERIENCE_GAIN");
+                String expMessage = message.getConfig().getString("EXPERIENCE_GAIN");
                 try {
                     playerLevelManager.setXp(playerLevelManager.getXp() + keyXP);
                     player.sendMessage(CC.color(expMessage).replace("{expGain}", "" + keyXP));
