@@ -42,108 +42,25 @@ public class LevelCommand implements CommandExecutor {
                 CC.playerMessage(player, s);
             }
         } else if (args[0].equals("setxp")) {
-            Player target = Bukkit.getPlayerExact(args[1]);
-            if (target != null) {
-                LevelManager targetLevelManager = plugin.levelManagerHashMap.get(target.getUniqueId());
-                if (isNum(args[2])) {
-                    targetLevelManager.setXp(targetLevelManager.getXp() + Integer.parseInt(args[1]));
-                    CC.playerMessage(player,
-                            message.getConfig().getString("COMMAND.SETXP_PLAYER").
-                                    replace("{amount}", "" + args[2]).
-                                    replace("{targetName}", target.getName()));
-                    CC.playerMessage(target,
-                            message.getConfig().getString("COMMAND.SETXP_TARGET").
-                                    replace("{amount}", "" + args[2]).
-                                    replace("{displayName}", player.getName()));
-                } else {
-                    CC.playerMessage(player,
-                            message.getConfig().getString("COMMAND.SETXP_ERROR_NUMBER"));
+            if(args.length > 1){
+                Player target = Bukkit.getPlayerExact(args[1]);
+                if(isNum(args[1]) && target == null){
+                    setEXP(player, args[1]);
                 }
-
-            }
-            if(target == null){
-                CC.playerMessage(player,
-                        message.getConfig().getString("COMMAND.SETXP_ERROR_PLAYER"));
-            }
-            else if (isNum(args[1])) {
-                playerLevelManager.setXp(Integer.parseInt(args[1]));
-                CC.playerMessage(player,
-                        message.getConfig().getString("COMMAND.SETXP").
-                                replace("{amount}", "" + args[1]));
-            } else {
-                CC.playerMessage(player,
-                        message.getConfig().getString("COMMAND.SETXP_ERROR_NUMBER"));
-            }
-            CC.playerMessage(player,
-                    message.getConfig().getString("COMMAND.SETXP_HELP"));
-        } else if (args[0].equals("givelevel")) {
-            Player target = Bukkit.getPlayerExact(args[1]);
-            if (target != null) {
-                LevelManager targetLevelManager = plugin.levelManagerHashMap.get(target.getUniqueId());
-                if (isNum(args[2])) {
-                    targetLevelManager.setLevel(targetLevelManager.getLevel() + Integer.parseInt(args[2]));
-                    CC.playerMessage(player,
-                            message.getConfig().getString("COMMAND.GIVELEVEL_PLAYER").
-                                    replace("{amount}", "" + args[2]).
-                                    replace("{targetName}", target.getName()));
-                    CC.playerMessage(target,
-                            message.getConfig().getString("COMMAND.GIVELEVEL_TARGET").
-                                    replace("{amount}", "" + args[2]).
-                                    replace("{displayName}", player.getName()));
-                } else {
-                    CC.playerMessage(player,
-                            message.getConfig().getString("COMMAND.GIVELEVEL_ERROR_NUMBER"));
+                else if(target != null && !isNum(args[1])){
+                    if(args.length > 2){
+                        if(target == player){
+                            CC.playerMessage(player, message.getConfig().getString("COMMAND.SETXP_NOEXIST"));
+                        }
+                        else {
+                            setEXPTarget(player, target, args[2]);
+                        }
+                    }
                 }
+            }
 
-            }
-            if(target == null){
-                CC.playerMessage(player,
-                        message.getConfig().getString("COMMAND.GIVELEVEL_ERROR_PLAYER"));
-            }
-            else if (isNum(args[1])) {
-                playerLevelManager.setLevel(playerLevelManager.getLevel() + Integer.parseInt(args[1]));
-                CC.playerMessage(player,
-                        message.getConfig().getString("COMMAND.GIVELEVEL").
-                                replace("{amount}", "" + args[1]));
-            }
-            CC.playerMessage(player,
-                    message.getConfig().getString("COMMAND.GIVELEVEL_HELP"));
-        } else if (args[0].equals("addxp")) {
-            Player target = Bukkit.getPlayerExact(args[1]);
-            if (target != null) {
-                LevelManager targetLevelManager = plugin.levelManagerHashMap.get(target.getUniqueId());
-                if (isNum(args[2])) {
-                    targetLevelManager.addXp(Integer.parseInt(args[2]));
-                    CC.playerMessage(player,
-                            message.getConfig().getString("COMMAND.ADDXP_PLAYER").
-                                    replace("{amount}", "" + args[2]).
-                                    replace("{targetName}", target.getName()));
-                    CC.playerMessage(target,
-                            message.getConfig().getString("COMMAND.ADDXP_TARGET").
-                                    replace("{amount}", "" + args[2]).
-                                    replace("{displayName}", player.getName()));
-                } else {
-                    CC.playerMessage(player,
-                            message.getConfig().getString("COMMAND.ADDXP_ERROR_NUMBER"));
-                }
-
-            }
-            if(target == null){
-                CC.playerMessage(player,
-                        message.getConfig().getString("COMMAND.ADDXP_ERROR_PLAYER"));
-            }
-            else if (isNum(args[1])) {
-                playerLevelManager.addXp(Integer.parseInt(args[1]));
-                CC.playerMessage(player,
-                        message.getConfig().getString("COMMAND.ADDXP").
-                                replace("{amount}", "" + args[1]));
-            } else {
-                CC.playerMessage(player,
-                        message.getConfig().getString("COMMAND.ADDXP_ERROR_NUMBER"));
-            }
-            CC.playerMessage(player,
-                    message.getConfig().getString("COMMAND.ADDXP_HELP"));
-        } else if (args[0].equals("reload")) {
+        }
+        else if (args[0].equals("reload")) {
             if(!player.hasPermission("playerleveling.reload")){
                 CC.playerMessage(player, message.getConfig().getString("COMMAND.NOPERMS"));
             }
@@ -185,6 +102,29 @@ public class LevelCommand implements CommandExecutor {
         }
         return true;
     }
+
+    public void setEXPTarget(Player player, Player target, String value){
+        LevelManager targetLevelManager = plugin.levelManagerHashMap.get(target.getUniqueId());
+        targetLevelManager.setXp(targetLevelManager.getXp() + Integer.parseInt(value));
+        CC.playerMessage(player,
+                message.getConfig().getString("COMMAND.SETXP_PLAYER").
+                        replace("{amount}", "" + value).
+                        replace("{targetName}", target.getName()));
+        CC.playerMessage(target,
+                message.getConfig().getString("COMMAND.SETXP_TARGET").
+                        replace("{amount}", "" + value).
+                        replace("{displayName}", player.getName()));
+    }
+
+
+    public void setEXP(Player player, String value){
+        LevelManager playerLevelManager = plugin.levelManagerHashMap.get(player.getUniqueId());
+        playerLevelManager.setXp(Integer.parseInt(value));
+        CC.playerMessage(player,
+                message.getConfig().getString("COMMAND.SETXP").
+                        replace("{amount}", "" + value));
+    }
+
 
     public void reloadConfigs() {
         plugin.getConfig();
