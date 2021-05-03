@@ -26,7 +26,6 @@ public class LevelCommand implements CommandExecutor {
         this.message = new Message(plugin);
     }
 
-    //TODO: MAKE THE COMMANDS MORE SIMPLE..
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
@@ -58,7 +57,43 @@ public class LevelCommand implements CommandExecutor {
                     }
                 }
             }
+        }
+        else if (args[0].equals("addxp")) {
+            if(args.length > 1){
+                Player target = Bukkit.getPlayerExact(args[1]);
+                if(isNum(args[1]) && target == null){
+                    addEXP(player, args[1]);
+                }
+                else if(target != null && !isNum(args[1])){
+                    if(args.length > 2){
+                        if(target == player){
+                            CC.playerMessage(player, message.getConfig().getString("COMMAND.ADDXP_NOEXIST"));
+                        }
+                        else {
+                            addEXPTarget(player, target, args[2]);
+                        }
+                    }
+                }
+            }
+        }
+        else if (args[0].equals("givelevel")) {
+            if(args.length > 1){
+                Player target = Bukkit.getPlayerExact(args[1]);
+                if(isNum(args[1]) && target == null){
+                    giveLevel(player, args[1]);
+                }
+                else if(target != null && !isNum(args[1])){
+                    if(args.length > 2){
+                        if(target == player){
+                            CC.playerMessage(player, message.getConfig().getString("COMMAND.GIVELEVEL_NOEXIST"));
+                        }
+                        else {
+                            giveLevelTarget(player, target, args[2]);
 
+                        }
+                    }
+                }
+            }
         }
         else if (args[0].equals("reload")) {
             if(!player.hasPermission("playerleveling.reload")){
@@ -67,24 +102,29 @@ public class LevelCommand implements CommandExecutor {
             CC.playerMessage(player, message.getConfig().getString("COMMAND.RELOAD"));
             reloadConfigs();
         }
-        else if (args[0].equals("reset")){
-            Player target = Bukkit.getPlayerExact(args[1]);
-            if(target != null){
-                LevelManager targetLevelManager = plugin.levelManagerHashMap.get(target.getUniqueId());
-                targetLevelManager.setXp(0);
-                targetLevelManager.setLevel(0);
+        else if (args[0].equals("reset")) {
+            if(args.length > 1){
+                Player target = Bukkit.getPlayerExact(args[1]);
+                if(target != null){
+                    if(target == player){
+                        CC.playerMessage(player, message.getConfig().getString("COMMAND.RESET_NOEXIST"));
+                    }
+                    else {
+                        LevelManager targetLevelManager = plugin.levelManagerHashMap.get(target.getUniqueId());
+                        targetLevelManager.setXp(0);
+                        targetLevelManager.setLevel(0);
+                        data.saveConfig();
+                        CC.playerMessage(target, message.getConfig().getString("COMMAND.RESET_TARGET")
+                                .replace("{displayName}", player.getName()));
+                    }
+
+                }
+            } else {
+                playerLevelManager.setXp(0);
+                playerLevelManager.setLevel(0);
                 data.saveConfig();
-                CC.playerMessage(target, message.getConfig().getString("COMMAND.RESET_TARGET")
-                        .replace("{displayName}", player.getName()));
+                CC.playerMessage(player, message.getConfig().getString("COMMAND.RESET"));
             }
-            else {
-                CC.playerMessage(player,
-                        message.getConfig().getString("COMMAND.RESET_ERROR_PLAYER"));
-            }
-            playerLevelManager.setXp(0);
-            playerLevelManager.setLevel(0);
-            data.saveConfig();
-            CC.playerMessage(player, message.getConfig().getString("COMMAND.RESET"));
         }
         else {
             for (String s : message.getConfig().getStringList("HELP_COMMAND")) {
@@ -114,8 +154,32 @@ public class LevelCommand implements CommandExecutor {
                 message.getConfig().getString("COMMAND.SETXP_TARGET").
                         replace("{amount}", "" + value).
                         replace("{displayName}", player.getName()));
+        targetLevelManager.xpCheck(player, targetLevelManager);
     }
 
+
+    public void addEXP(Player player, String value){
+        LevelManager playerLevelManager = plugin.levelManagerHashMap.get(player.getUniqueId());
+        playerLevelManager.addXp(Integer.parseInt(value));
+        CC.playerMessage(player,
+                message.getConfig().getString("COMMAND.ADDXP").
+                        replace("{amount}", "" + value));
+        playerLevelManager.xpCheck(player, playerLevelManager);
+    }
+
+    public void addEXPTarget(Player player, Player target, String value){
+        LevelManager targetLevelManager = plugin.levelManagerHashMap.get(target.getUniqueId());
+        targetLevelManager.setXp(targetLevelManager.getXp() + Integer.parseInt(value));
+        CC.playerMessage(player,
+                message.getConfig().getString("COMMAND.ADDXP_PLAYER").
+                        replace("{amount}", "" + value).
+                        replace("{targetName}", target.getName()));
+        CC.playerMessage(target,
+                message.getConfig().getString("COMMAND.ADDXP_TARGET").
+                        replace("{amount}", "" + value).
+                        replace("{displayName}", player.getName()));
+        targetLevelManager.xpCheck(player, targetLevelManager);
+    }
 
     public void setEXP(Player player, String value){
         LevelManager playerLevelManager = plugin.levelManagerHashMap.get(player.getUniqueId());
@@ -123,7 +187,33 @@ public class LevelCommand implements CommandExecutor {
         CC.playerMessage(player,
                 message.getConfig().getString("COMMAND.SETXP").
                         replace("{amount}", "" + value));
+        playerLevelManager.xpCheck(player, playerLevelManager);
     }
+
+    public void giveLevel(Player player, String value){
+        LevelManager playerLevelManager = plugin.levelManagerHashMap.get(player.getUniqueId());
+        playerLevelManager.setLevel(Integer.parseInt(value));
+        CC.playerMessage(player,
+                message.getConfig().getString("COMMAND.GIVELEVEL").
+                        replace("{amount}", "" + value));
+        playerLevelManager.xpCheck(player, playerLevelManager);
+    }
+
+    public void giveLevelTarget(Player player, Player target, String value){
+        LevelManager targetLevelManager = plugin.levelManagerHashMap.get(target.getUniqueId());
+        targetLevelManager.setXp(targetLevelManager.getXp() + Integer.parseInt(value));
+        CC.playerMessage(player,
+                message.getConfig().getString("COMMAND.GIVEXP_PLAYER").
+                        replace("{amount}", "" + value).
+                        replace("{targetName}", target.getName()));
+        CC.playerMessage(target,
+                message.getConfig().getString("COMMAND.GIVEXP_TARGET").
+                        replace("{amount}", "" + value).
+                        replace("{displayName}", player.getName()));
+        targetLevelManager.xpCheck(player, targetLevelManager);
+    }
+
+
 
 
     public void reloadConfigs() {
