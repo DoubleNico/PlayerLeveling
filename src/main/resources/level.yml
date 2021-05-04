@@ -5,3 +5,12 @@ Levels:
   2:
     xpMax: 1500
     level: 2
+  3:
+    xpMax: 2000
+    level: 3
+  4:
+    xpMax: 2500
+    level: 4
+  5:
+    xpMax: 3000
+    level: 5

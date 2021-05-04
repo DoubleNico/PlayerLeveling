@@ -1,7 +1,9 @@
 package me.doublenico.playerleveling.events.impl;
 
 import me.doublenico.playerleveling.PlayerLeveling;
+import me.doublenico.playerleveling.bossbar.Bossbar;
 import me.doublenico.playerleveling.files.DataManager;
+import me.doublenico.playerleveling.files.Message;
 import me.doublenico.playerleveling.leveling.LevelManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,10 +14,13 @@ public class RemovePlayer implements Listener {
 
     public PlayerLeveling plugin;
     public DataManager data;
+    public Message message;
+    public Bossbar bar;
 
     public RemovePlayer(PlayerLeveling plugin){
         this.plugin = plugin;
         this.data = new DataManager(plugin);
+        this.message = new Message(plugin);
     }
 
 
@@ -29,6 +34,13 @@ public class RemovePlayer implements Listener {
             data.getConfig().set("PlayerLevels." + player.getUniqueId() + ".xp", playerLevelManager.getXp());
             data.saveConfig();
             plugin.levelManagerHashMap.remove(player.getUniqueId());
+        }
+        boolean enabled = message.getConfig().getBoolean("BossBar.enabled");
+        if(enabled) {
+            bar = new Bossbar(PlayerLeveling.instance);
+            if(bar.getBar().getPlayers().contains(player)) {
+                bar.removePlayer(player);
+            }
         }
     }
 

@@ -1,5 +1,5 @@
 EXPERIENCE_GAIN: "&b{expGain} Experience."
-LEVEL_UP: "&bYou have reached a new level."
+LEVEL_UP: '&bYou just leveled up.'
 MAX_LEVEL: "&bYou have reached the maximum level."
 REGISTER_PLAYER: "&bRegistering &e&l{uuid} &bto Data Manager"
 COMMAND:
@@ -12,14 +12,37 @@ COMMAND:
   ADDXP_PLAYER: "&bYou just gave &e{amount} &bexp to &e{targetName}&b."
   ADDXP_TARGET: "&bYou just got &e{amount} &bexp from &e{displayName}&b."
   ADDXP_NOEXIST: "&bYou can't do that to yourself"
+  REMOVEXP: "&bYou just removed &e{amount}&b exp."
+  REMOVEXP_PLAYER: "&bYou just removed &e{amount} &bexp to &e{targetName}&b."
+  REMOVEXP_TARGET: "&bYou exp &e{amount} &bwas removed by &e{displayName}&b."
+  REMOVEXP_NOEXIST: "&bYou can't do that to yourself"
   GIVELEVEL: "&bYou just got &e{amount}&b level."
   GIVELEVEL_PLAYER: "&bYou just gave &e{amount} &blevel to &e{targetName}&b."
   GIVELEVEL_TARGET: "&bYou just got &e{amount} &blevel from &e{displayName}&b."
   GIVELEVEL_NOEXIST: "&bYou can't do that to yourself"
-  RELOAD: "&bThe configs has reloaded."
+  RELOAD: "&bThe configs has been reloaded."
   RESET: "&bYou reseted your level."
   RESET_TARGET: "&bYour level and xp are now reseted by &e{displayName}&b."
   RESET_NOEXIST: "&bYou can't do that to yourself"
 HELP_COMMAND:
   - "&bHelp"
   - "&bHelp"
+
+Title:
+  enable: false
+  title: "&b&lLEVEL UP"
+  subtitle: "&bCongrats, you leveled up to &e&l%playerleveling_level%"
+  fadein: 20
+  stay: 65
+  fadeout: 15
+
+ActionBar:
+  enable: false
+  message: "&bCongrats, you leveled up to &e&l%playerleveling_level%"
+
+
+BossBar:
+  enabled: false
+  message: "&bCongrats, you leveled up to &e&l%playerleveling_level%"
+  color: "RED"
+  time: 5
