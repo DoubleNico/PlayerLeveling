@@ -35,13 +35,6 @@ public class RemovePlayer implements Listener {
             data.saveConfig();
             plugin.levelManagerHashMap.remove(player.getUniqueId());
         }
-        boolean enabled = message.getConfig().getBoolean("BossBar.enabled");
-        if(enabled) {
-            bar = new Bossbar(PlayerLeveling.instance);
-            if(bar.getBar().getPlayers().contains(player)) {
-                bar.removePlayer(player);
-            }
-        }
     }
 
 }

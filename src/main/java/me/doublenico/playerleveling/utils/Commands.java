@@ -136,37 +136,109 @@ public class Commands {
         targetLevelManager.xpCheck(target, targetLevelManager);
     }
 
-    public void giveLevel(Player player, String value){
+    public void setLevel(Player player, String value){
         LevelManager playerLevelManager = plugin.levelManagerHashMap.get(player.getUniqueId());
         playerLevelManager.setLevel(Integer.parseInt(value));
         CC.playerMessage(player,
-                Objects.requireNonNull(message.getConfig().getString("COMMAND.GIVELEVEL")).
+                Objects.requireNonNull(message.getConfig().getString("COMMAND.SETLEVEL")).
                         replace("{amount}", "" + value));
         playerLevelManager.xpCheck(player, playerLevelManager);
     }
 
-    public void giveLevelTarget(Player player, Player target, String value){
+    public void setLevelTarget(Player player, Player target, String value){
         LevelManager targetLevelManager = plugin.levelManagerHashMap.get(target.getUniqueId());
         targetLevelManager.setLevel(targetLevelManager.getXp() + Integer.parseInt(value));
         CC.playerMessage(player,
-                Objects.requireNonNull(message.getConfig().getString("COMMAND.GIVEXP_PLAYER")).
+                Objects.requireNonNull(message.getConfig().getString("COMMAND.SETLEVEL_PLAYER")).
                         replace("{amount}", "" + value).
                         replace("{targetName}", target.getName()));
         CC.playerMessage(target,
-                Objects.requireNonNull(message.getConfig().getString("COMMAND.GIVEXP_TARGET")).
+                Objects.requireNonNull(message.getConfig().getString("COMMAND.SETLEVEL_TARGET")).
                         replace("{amount}", "" + value).
                         replace("{displayName}", player.getName()));
         targetLevelManager.xpCheck(target, targetLevelManager);
     }
 
-    public void giveLevelConsole(Player target, String value){
+    public void setLevelConsole(Player target, String value){
         LevelManager targetLevelManager = plugin.levelManagerHashMap.get(target.getUniqueId());
         targetLevelManager.setLevel(Integer.parseInt(value));
-        CC.console(Objects.requireNonNull(message.getConfig().getString("COMMAND.GIVEXP_PLAYER")).
+        CC.console(Objects.requireNonNull(message.getConfig().getString("COMMAND.SETLEVEL_PLAYER")).
                 replace("{amount}", "" + value).
                 replace("{targetName}", target.getName()));
         CC.playerMessage(target,
-                message.getConfig().getString("COMMAND.GIVEXP_TARGET").
+                message.getConfig().getString("COMMAND.SETLEVEL_TARGET").
+                        replace("{amount}", "" + value).
+                        replace("{displayName}", "CONSOLE"));
+        targetLevelManager.xpCheck(target, targetLevelManager);
+    }
+
+    public void addLevel(Player player, String value){
+        LevelManager playerLevelManager = plugin.levelManagerHashMap.get(player.getUniqueId());
+        playerLevelManager.addLevel(Integer.parseInt(value));
+        CC.playerMessage(player,
+                Objects.requireNonNull(message.getConfig().getString("COMMAND.ADDLEVEL")).
+                        replace("{amount}", "" + value));
+        playerLevelManager.xpCheck(player, playerLevelManager);
+    }
+
+    public void addLevelTarget(Player player, Player target, String value){
+        LevelManager targetLevelManager = plugin.levelManagerHashMap.get(target.getUniqueId());
+        targetLevelManager.addLevel(targetLevelManager.getXp() + Integer.parseInt(value));
+        CC.playerMessage(player,
+                Objects.requireNonNull(message.getConfig().getString("COMMAND.ADDLEVEL_PLAYER")).
+                        replace("{amount}", "" + value).
+                        replace("{targetName}", target.getName()));
+        CC.playerMessage(target,
+                Objects.requireNonNull(message.getConfig().getString("COMMAND.ADDLEVEL_TARGET")).
+                        replace("{amount}", "" + value).
+                        replace("{displayName}", player.getName()));
+        targetLevelManager.xpCheck(target, targetLevelManager);
+    }
+
+    public void addLevelConsole(Player target, String value){
+        LevelManager targetLevelManager = plugin.levelManagerHashMap.get(target.getUniqueId());
+        targetLevelManager.addLevel(Integer.parseInt(value));
+        CC.console(Objects.requireNonNull(message.getConfig().getString("COMMAND.ADDLEVEL_PLAYER")).
+                replace("{amount}", "" + value).
+                replace("{targetName}", target.getName()));
+        CC.playerMessage(target,
+                message.getConfig().getString("COMMAND.ADDLEVEL_TARGET").
+                        replace("{amount}", "" + value).
+                        replace("{displayName}", "CONSOLE"));
+        targetLevelManager.xpCheck(target, targetLevelManager);
+    }
+
+    public void removeLevel(Player player, String value){
+        LevelManager playerLevelManager = plugin.levelManagerHashMap.get(player.getUniqueId());
+        playerLevelManager.removeLevel(Integer.parseInt(value));
+        CC.playerMessage(player,
+                Objects.requireNonNull(message.getConfig().getString("COMMAND.REMOVELEVEL")).
+                        replace("{amount}", "" + value));
+        playerLevelManager.xpCheck(player, playerLevelManager);
+    }
+
+    public void removeLevelTarget(Player player, Player target, String value){
+        LevelManager targetLevelManager = plugin.levelManagerHashMap.get(target.getUniqueId());
+        targetLevelManager.removeLevel(targetLevelManager.getXp() + Integer.parseInt(value));
+        CC.playerMessage(player,
+                Objects.requireNonNull(message.getConfig().getString("COMMAND.REMOVELEVEL_PLAYER")).
+                        replace("{amount}", "" + value).
+                        replace("{targetName}", target.getName()));
+        CC.playerMessage(target,
+                Objects.requireNonNull(message.getConfig().getString("COMMAND.REMOVELEVEL_TARGET")).
+                        replace("{amount}", "" + value).
+                        replace("{displayName}", player.getName()));
+        targetLevelManager.xpCheck(target, targetLevelManager);
+    }
+
+    public void removeLevelConsole(Player target, String value){
+        LevelManager targetLevelManager = plugin.levelManagerHashMap.get(target.getUniqueId());
+        targetLevelManager.removeLevel(Integer.parseInt(value));
+        CC.console(Objects.requireNonNull(message.getConfig().getString("COMMAND.REMOVELEVEL_PLAYER")).
+                replace("{amount}", "" + value).
+                replace("{targetName}", target.getName()));
+        CC.playerMessage(target,
+                message.getConfig().getString("COMMAND.REMOVELEVEL_TARGET").
                         replace("{amount}", "" + value).
                         replace("{displayName}", "CONSOLE"));
         targetLevelManager.xpCheck(target, targetLevelManager);

@@ -1,32 +1,27 @@
 package me.doublenico.playerleveling.leveling;
 
-import com.google.gson.stream.JsonWriter;
+import com.google.common.base.Strings;
 import me.clip.placeholderapi.PlaceholderAPI;
+import me.doublenico.hypeapi.json.JSON;
 import me.doublenico.playerleveling.PlayerLeveling;
-import me.doublenico.playerleveling.actionbar.ActionBar;
-import me.doublenico.playerleveling.bossbar.Bossbar;
 import me.doublenico.playerleveling.files.DataManager;
 import me.doublenico.playerleveling.files.LevelFile;
 import me.doublenico.playerleveling.files.Message;
-import me.doublenico.playerleveling.json.DynamicJText;
-import me.doublenico.playerleveling.title.Title;
 import me.doublenico.playerleveling.utils.CC;
-import net.md_5.bungee.chat.ComponentSerializer;
-import org.bukkit.boss.BossBar;
+import me.doublenico.playerleveling.utils.LevelUP;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-
-import java.io.IOException;
-import java.io.StringWriter;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class LevelManager {
 
     private int level;
     private int xp;
+    private int maxXP;
     public LevelFile levelFile;
     public DataManager data;
     public Message message;
-    public Bossbar bar;
 
     public LevelManager(int level, int xp) {
         this.level = level;
@@ -42,6 +37,17 @@ public class LevelManager {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public void addLevel(int level) {
+        this.level += level;
+    }
+
+    public void removeLevel(int level){
+        this.level -= level;
+        if(this.level <= 0){
+            this.level = 0;
+        }
     }
 
     public int getXp() {
@@ -63,59 +69,86 @@ public class LevelManager {
         this.xp += xp;
     }
 
+    public int getMaxXP(){
+        ConfigurationSection block = levelFile.getConfig().getConfigurationSection("Levels." + (this.getLevel() + 1));
+        if(block == null){
+            return maxXP = 0;
+        } else {
+            int levelSection = block.getInt("level");
+            if (levelSection != this.getLevel()) {
+                maxXP = block.getInt("xpMax");
+                return maxXP;
+            }
+        }
+        return maxXP;
+    }
+
+    public int getEXPGained(OfflinePlayer player){
+        return data.getConfig().getInt("PlayerLevels." + player.getUniqueId() + ".xpGained");
+    }
+
+
     public void xpCheck(Player player, LevelManager level) {
-        for (String key :
-                levelFile.
-                        getConfig().
-                        getConfigurationSection("Levels").
-                        getKeys(false)) {
-            ConfigurationSection block = levelFile.getConfig().getConfigurationSection("Levels." + key);
-            assert block != null;
+        ConfigurationSection block = levelFile.getConfig().getConfigurationSection("Levels." + (level.getLevel() + 1));
+        if (block == null){
+            level.setLevel(0);
+            level.setXp(0);
+            data.getConfig().set("PlayerLevels." + player.getUniqueId() + ".level", 0);
+            data.getConfig().set("PlayerLevels." + player.getUniqueId() + ".xp", 0);
+            data.saveConfig();
+            for (String s : message.getConfig().getStringList("MAX_LEVEL")){
+                s = PlaceholderAPI.setPlaceholders(player, s);
+                if(s.startsWith("{")){
+                    JSON.sendJSON(player, s);
+                } else {
+                    CC.playerMessage(player, s);
+                }
+            }
+        } else {
+            int levelSection = block.getInt("level");
             int xp = level.getXp();
             int xpMax = block.getInt("xpMax");
-            int levelSection = block.getInt("level");
-            
-            if (levelSection < level.getLevel()){
-                new DynamicJText(CC.color(message.getConfig().getString("MAX_LEVEL")))
-                        .send(player);
-                level.setXp(0);
-                level.setLevel(levelSection);
-            }
-            if (xp  >= xpMax && levelSection != level.getLevel()) {
+            if (xp >= xpMax) {
                 level.setLevel(levelSection);
                 level.setXp(0);
                 data.getConfig().set("PlayerLevels." + player.getUniqueId() + ".level", levelSection);
                 data.getConfig().set("PlayerLevels." + player.getUniqueId() + ".xp", 0);
                 data.saveConfig();
-                Title title = new Title(PlayerLeveling.instance);
-                title.sendTitle(player);
-                String levelup = message.getConfig().getString("LEVEL_UP");
-                assert levelup != null;
-                //TODO: JSON Support
-                levelup = PlaceholderAPI.setPlaceholders(player, levelup);
-                CC.playerMessage(player, levelup);
-                ActionBar actionBar = new ActionBar(PlayerLeveling.instance);
-                actionBar.sendActionBar(player);
-                boolean enabled = message.getConfig().getBoolean("BossBar.enabled");
-                if(enabled) {
-                    bar = new Bossbar(PlayerLeveling.instance);
-                    bar.createBar(player);
-                }
+                LevelUP message = new LevelUP(JavaPlugin.getPlugin(PlayerLeveling.class));
+                message.levelMessage(player);
             }
         }
-
     }
 
 
-    //TODO: JSON Support
+
+
     public void addExperience(Player player, int XP) {
         String expMessage = message.getConfig().getString("EXPERIENCE_GAIN");
         this.setXp(this.getXp() + XP);
-        CC.playerMessage(player, CC.color(expMessage).replace("{expGain}", "" + XP));
+        assert expMessage != null;
+        if(expMessage.startsWith("{")){
+            JSON.sendJSON(player, CC.color(expMessage).replace("{expGain}", "" + XP));
+        } else {
+            CC.playerMessage(player, CC.color(expMessage).replace("{expGain}", "" + XP));
+        }
         data.getConfig().set("PlayerLevels." + player.getUniqueId() + ".level", this.getLevel());
         data.getConfig().set("PlayerLevels." + player.getUniqueId() + ".xp", this.getXp());
+        int getExpGained = data.getConfig().getInt("PlayerLevels." + player.getUniqueId() + ".xpGained");
+        data.getConfig().set("PlayerLevels." + player.getUniqueId() + ".xpGained", getExpGained + XP);
         data.saveConfig();
         this.xpCheck(player, this);
     }
+
+    public String getProgressBar(int current, int max, int totalBars, char symbol, String completedColor,
+                                 String notCompletedColor) {
+        float percent = (float) current / max;
+        int progressBars = (int) (totalBars * percent);
+
+        return Strings.repeat("" + completedColor + symbol, progressBars)
+                + Strings.repeat("" + notCompletedColor + symbol, totalBars - progressBars);
+    }
+
+
 
 }

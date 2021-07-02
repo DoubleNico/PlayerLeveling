@@ -1,4 +1,7 @@
 Levels:
+  maxLevel:
+    xpMax: 6000
+    levelMax: 10
   1:
     xpMax: 1000
     level: 1
@@ -8,9 +11,3 @@ Levels:
   3:
     xpMax: 2000
     level: 3
-  4:
-    xpMax: 2500
-    level: 4
-  5:
-    xpMax: 3000
-    level: 5

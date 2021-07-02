@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,8 +21,17 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
             if(sender.hasPermission("playerleveling.addxp")) {
                 arguments.add("addxp");
             }
-            if(sender.hasPermission("playerleveling.givelevel")) {
-                arguments.add("givelevel");
+            if(sender.hasPermission("playerleveling.removexp")) {
+                arguments.add("removexp");
+            }
+            if(sender.hasPermission("playerleveling.setlevel")) {
+                arguments.add("setlevel");
+            }
+            if(sender.hasPermission("playerleveling.addlevel")) {
+                arguments.add("addlevel");
+            }
+            if(sender.hasPermission("playerleveling.removelevel")) {
+                arguments.add("removelevel");
             }
             if(sender.hasPermission("playerleveling.reset")) {
                 arguments.add("reset");
@@ -32,8 +42,8 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
             if(sender.hasPermission("playerleveling.about")) {
                 arguments.add("about");
             }
-            if(sender.hasPermission("playerleveling.removexp")) {
-                arguments.add("removexp");
+            if(sender.hasPermission("playerleveling.stats")) {
+                arguments.add("stats");
             }
             return arguments;
 
@@ -54,7 +64,25 @@ public class TabCompleter implements org.bukkit.command.TabCompleter {
                     arguments.add(players[i].getName());
                 }
             }
-            if(args[0].equals("givelevel") && sender.hasPermission("playerleveling.givelevel")){
+            if(args[0].equals("setlevel") && sender.hasPermission("playerleveling.setlevel")){
+                arguments.add("<number>|<playername>");
+                for (int i = 0; i < players.length; i++){
+                    arguments.add(players[i].getName());
+                }
+            }
+            if(args[0].equals("removelevel") && sender.hasPermission("playerleveling.removelevel")){
+                arguments.add("<number>|<playername>");
+                for (int i = 0; i < players.length; i++){
+                    arguments.add(players[i].getName());
+                }
+            }
+            if(args[0].equals("stats") && sender.hasPermission("playerleveling.stats")){
+                arguments.add("<number>|<playername>");
+                for (int i = 0; i < players.length; i++){
+                    arguments.add(players[i].getName());
+                }
+            }
+            if(args[0].equals("addlevel") && sender.hasPermission("playerleveling.addlevel")){
                 arguments.add("<number>|<playername>");
                 for (int i = 0; i < players.length; i++){
                     arguments.add(players[i].getName());

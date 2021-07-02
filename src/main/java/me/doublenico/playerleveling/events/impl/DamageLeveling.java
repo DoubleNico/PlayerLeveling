@@ -35,13 +35,12 @@ public class DamageLeveling implements Listener {
     public void onAttack(EntityDeathEvent event) {
         Player player = event.getEntity().getKiller();
         Entity victim = event.getEntity();
-        if(event.getEntity().getKiller() != player)
+        if(event.getEntity().getKiller() == null)
             return;
-
-        if (event.getEntity().getKiller() == player) {
-            assert player != null;
-            LevelManager playerLevelManager = plugin.levelManagerHashMap.get(player.getUniqueId());
+        if(event.getEntity().getKiller() == player){
             for (String key : Objects.requireNonNull(plugin.getConfig().getConfigurationSection("DAMAGE")).getKeys(false)) {
+                assert player != null;
+                LevelManager playerLevelManager = plugin.levelManagerHashMap.get(player.getUniqueId());
                 ConfigurationSection section = plugin.getConfig().getConfigurationSection("DAMAGE." + key);
                 assert section != null;
                 int keyXP = section.getInt(".value");

@@ -1,5 +1,6 @@
 package me.doublenico.playerleveling.commands.impl;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.doublenico.playerleveling.PlayerLeveling;
 import me.doublenico.playerleveling.files.DataManager;
 import me.doublenico.playerleveling.files.LevelFile;
@@ -94,27 +95,85 @@ public class LevelCommand implements CommandExecutor {
                 sender.sendMessage(CC.color(message.getConfig().getString("COMMAND.NOPERMS")));
             }
         }
-        else if (args[0].equals("givelevel")) {
-            if(sender.hasPermission("playerleveling.givelevel")) {
+        else if (args[0].equals("setlevel")) {
+            if(sender.hasPermission("playerleveling.setlevel")) {
                 if (args.length > 1) {
                     Player target = Bukkit.getPlayerExact(args[1]);
                     if (isNum(args[1]) && target == null && sender instanceof Player) {
                         Player player = (Player) sender;
-                        commands.giveLevel(player, args[1]);
+                        commands.setLevel(player, args[1]);
                     } else if (target != null && !isNum(args[1])) {
                         if(sender instanceof Player) {
                             Player player = (Player) sender;
                             if (args.length > 2) {
                                 if (target == player) {
-                                    CC.playerMessage(player, message.getConfig().getString("COMMAND.GIVELEVEL_NOEXIST"));
+                                    CC.playerMessage(player, message.getConfig().getString("COMMAND.SETLEVEL_NOEXIST"));
                                 } else {
-                                    commands.giveLevelTarget(player, target, args[2]);
+                                    commands.setLevelTarget(player, target, args[2]);
 
                                 }
                             }
                         } else {
                             if (args.length > 2) {
-                                commands.giveLevelConsole(target, args[2]);
+                                commands.setLevelConsole(target, args[2]);
+                            }
+                        }
+                    }
+                }
+            } else {
+                sender.sendMessage(CC.color(message.getConfig().getString("COMMAND.NOPERMS")));
+            }
+        }
+        else if (args[0].equals("addlevel")) {
+            if(sender.hasPermission("playerleveling.addlevel")) {
+                if (args.length > 1) {
+                    Player target = Bukkit.getPlayerExact(args[1]);
+                    if (isNum(args[1]) && target == null && sender instanceof Player) {
+                        Player player = (Player) sender;
+                        commands.addLevel(player, args[1]);
+                    } else if (target != null && !isNum(args[1])) {
+                        if(sender instanceof Player) {
+                            Player player = (Player) sender;
+                            if (args.length > 2) {
+                                if (target == player) {
+                                    CC.playerMessage(player, message.getConfig().getString("COMMAND.ADDLEVEL_NOEXIST"));
+                                } else {
+                                    commands.addLevelTarget(player, target, args[2]);
+
+                                }
+                            }
+                        } else {
+                            if (args.length > 2) {
+                                commands.addLevelConsole(target, args[2]);
+                            }
+                        }
+                    }
+                }
+            } else {
+                sender.sendMessage(CC.color(message.getConfig().getString("COMMAND.NOPERMS")));
+            }
+        }
+        else if (args[0].equals("removelevel")) {
+            if(sender.hasPermission("playerleveling.removelevel")) {
+                if (args.length > 1) {
+                    Player target = Bukkit.getPlayerExact(args[1]);
+                    if (isNum(args[1]) && target == null && sender instanceof Player) {
+                        Player player = (Player) sender;
+                        commands.removeLevel(player, args[1]);
+                    } else if (target != null && !isNum(args[1])) {
+                        if(sender instanceof Player) {
+                            Player player = (Player) sender;
+                            if (args.length > 2) {
+                                if (target == player) {
+                                    CC.playerMessage(player, message.getConfig().getString("COMMAND.REMOVELEVEL_NOEXIST"));
+                                } else {
+                                    commands.removeLevelTarget(player, target, args[2]);
+
+                                }
+                            }
+                        } else {
+                            if (args.length > 2) {
+                                commands.removeLevelConsole(target, args[2]);
                             }
                         }
                     }
@@ -206,12 +265,47 @@ public class LevelCommand implements CommandExecutor {
                 if(sender instanceof Player) {
                     Player player = (Player) sender;
                     CommandsJSON.aboutJSON(player);
-                }
-                for (String s : message.getConfig().getStringList("HELP_COMMAND")) {
-                    sender.sendMessage(CC.color(s));
+                } else {
+                    for (String s : message.getConfig().getStringList("HELP_COMMAND")) {
+                        sender.sendMessage(CC.color(s));
+                    }
                 }
             } else {
                 sender.sendMessage(CC.color(message.getConfig().getString("COMMAND.NOPERMS")));
+            }
+        }
+        else if(args[0].equals("stats")) {
+            if (sender.hasPermission("playerleveling.stats")) {
+                if (args.length > 1) {
+                    Player target = Bukkit.getPlayerExact(args[1]);
+                    if (target != null) {
+                        if (sender instanceof Player) {
+                            Player player = (Player) sender;
+                            if (target == player) {
+                                CC.playerMessage(player, message.getConfig().getString("STATS_NOEXIST"));
+                            } else {
+                                for(String s : message.getConfig().getStringList("STATS.TARGET")){
+                                    s = PlaceholderAPI.setPlaceholders(target, s);
+                                    CC.playerMessage(player, s);
+                                }
+                            }
+                        } else {
+                            for(String s : message.getConfig().getStringList("STATS.TARGET")){
+                                s = PlaceholderAPI.setPlaceholders(target, s);
+                                sender.sendMessage(CC.color(s));
+                            }
+                        }
+                    }
+                }
+                else {
+                    if(sender instanceof Player) {
+                        Player player = (Player) sender;
+                        for (String s : message.getConfig().getStringList("STATS.PLAYER")) {
+                            s = PlaceholderAPI.setPlaceholders(player, s);
+                            player.sendMessage(CC.color(s));
+                        }
+                    }
+                }
             }
         }
         else {

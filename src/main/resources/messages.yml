@@ -1,32 +1,85 @@
 EXPERIENCE_GAIN: "&b{expGain} Experience."
-LEVEL_UP: '&bYou just leveled up.'
-MAX_LEVEL: "&bYou have reached the maximum level."
+LEVEL_UP:
+  - "&b&l&m[----------------------------------]"
+  - '&b'
+  - '{"text":"HEY! YOU JUST LEVELED UP","bold":true,"italic":true,"underlined":true,"color":"dark_blue","hoverEvent":{"action":"show_text","contents":[{"text":"Congrats","bold":true,"italic":true,"color":"dark_red"}]}}'
+  - '&b'
+  - "&b&l&m[----------------------------------]"
+MAX_LEVEL:
+  - "&b&l&m[----------------------------------]"
+  - '&b'
+  - "&bYou have reached the maximum level."
+  - '&b'
+  - "&b&l&m[----------------------------------]"
+
 REGISTER_PLAYER: "&bRegistering &e&l{uuid} &bto Data Manager"
+
+
+
 COMMAND:
   NOPERMS: "&bYou don't have permission to execute this command."
   SETXP: "&bYou just set &e{amount}&b exp."
   SETXP_PLAYER: "&bYou just set &e{amount} &bexp to &e{targetName}&b."
-  SETXP_TARGET: "&bYou exp was change to &e{amount} &bfrom &e{displayName}&b."
+  SETXP_TARGET: "&bYou exp was change to &e{amount} &bby &e{displayName}&b."
   SETXP_NOEXIST: "&bYou can't do that to yourself"
   ADDXP: "&bYou just got &e{amount}&b exp."
   ADDXP_PLAYER: "&bYou just gave &e{amount} &bexp to &e{targetName}&b."
-  ADDXP_TARGET: "&bYou just got &e{amount} &bexp from &e{displayName}&b."
+  ADDXP_TARGET: "&bYou just got &e{amount} &bexp by &e{displayName}&b."
   ADDXP_NOEXIST: "&bYou can't do that to yourself"
   REMOVEXP: "&bYou just removed &e{amount}&b exp."
   REMOVEXP_PLAYER: "&bYou just removed &e{amount} &bexp to &e{targetName}&b."
   REMOVEXP_TARGET: "&bYou exp &e{amount} &bwas removed by &e{displayName}&b."
   REMOVEXP_NOEXIST: "&bYou can't do that to yourself"
-  GIVELEVEL: "&bYou just got &e{amount}&b level."
-  GIVELEVEL_PLAYER: "&bYou just gave &e{amount} &blevel to &e{targetName}&b."
-  GIVELEVEL_TARGET: "&bYou just got &e{amount} &blevel from &e{displayName}&b."
-  GIVELEVEL_NOEXIST: "&bYou can't do that to yourself"
+  SETLEVEL: "&bYou just set &e{amount}&b level."
+  SETLEVEL_PLAYER: "&bYou just set &e{amount} &blevel to &e{targetName}&b."
+  SETLEVEL_TARGET: "&bYou level was change to &e{amount} &bby &e{displayName}&b."
+  SETLEVEL_NOEXIST: "&bYou can't do that to yourself"
+  ADDLEVEL: "&bYou just got &e{amount}&b level."
+  ADDLEVEL_PLAYER: "&bYou just gave &e{amount} &blevel to &e{targetName}&b."
+  ADDLEVEL_TARGET: "&bYou just got &e{amount} &blevel from &e{displayName}&b."
+  ADDLEVEL_NOEXIST: "&bYou can't do that to yourself"
+  REMOVELEVEL: "&bYou just removed &e{amount}&b level."
+  REMOVELEVEL_PLAYER: "&bYou just removed &e{amount} &blevel to &e{targetName}&b."
+  REMOVELEVEL_TARGET: "&bYou just removed &e{amount} &blevel from &e{displayName}&b."
+  REMOVELEVEL_NOEXIST: "&bYou can't do that to yourself"
   RELOAD: "&bThe configs has been reloaded."
   RESET: "&bYou reseted your level."
   RESET_TARGET: "&bYour level and xp are now reseted by &e{displayName}&b."
   RESET_NOEXIST: "&bYou can't do that to yourself"
+
+
 HELP_COMMAND:
   - "&bHelp"
   - "&bHelp"
+
+STATS:
+  NOEXIST: "&bYou can't do that to yourself"
+  PLAYER:
+    - "&b&l&m[----------------------------------]"
+    - "&f"
+    - "&b      Level: &e&l%playerleveling_level%"
+    - "&b      Experience: &e&l%playerleveling_xp%"
+    - "&b      MaxExperince: &e&l%playerleveling_maxxp%"
+    - "&b      ExpGained: &e&l%playerleveling_xpgained%"
+    - "&b      %playerleveling_expbar%"
+    - "&f"
+    - "&b&l&m[----------------------------------]"
+  TARGET:
+    - "&b&l&m[-----------[&e&l%player_name%&b&l&m-----------]"
+    - "&f"
+    - "&b      Level: &e&l%playerleveling_level%"
+    - "&b      Experience: &e&l%playerleveling_xp%"
+    - "&f"
+    - "&b&l&m[-----------[&e&l%player_name%&b&l&m-----------]"
+
+
+EXPBAR:
+  bars: 10
+  completedColor: "§b"
+  notcompletedColor: "§7"
+  symbol: '|'
+
+
 
 Title:
   enable: false
@@ -37,9 +90,8 @@ Title:
   fadeout: 15
 
 ActionBar:
-  enable: false
+  enable: true
   message: "&bCongrats, you leveled up to &e&l%playerleveling_level%"
-
 
 BossBar:
   enabled: false

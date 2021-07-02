@@ -21,7 +21,7 @@ public final class PlayerLeveling extends JavaPlugin {
     public LevelFile levelFile;
     public DataManager data;
     public Message message;
-    public String prefix = "&b&l[&e&lPlayer&eLeveling&b&l] ";
+    public static String prefix = "&b&l[&e&lPlayer&eLeveling&b&l] ";
 
     @Override
     public void onEnable() {

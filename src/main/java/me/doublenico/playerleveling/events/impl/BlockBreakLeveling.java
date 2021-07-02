@@ -3,7 +3,6 @@ package me.doublenico.playerleveling.events.impl;
 import me.doublenico.playerleveling.PlayerLeveling;
 import me.doublenico.playerleveling.files.DataManager;
 import me.doublenico.playerleveling.files.Message;
-import me.doublenico.playerleveling.json.DynamicJText;
 import me.doublenico.playerleveling.leveling.LevelManager;
 import me.doublenico.playerleveling.utils.CC;
 import org.bukkit.GameMode;
@@ -14,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 
